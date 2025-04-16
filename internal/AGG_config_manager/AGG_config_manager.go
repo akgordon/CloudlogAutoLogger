@@ -19,7 +19,7 @@ type AGG_config_manager struct {
 
 const (
 	filename  string = "cloudlog_auto_logger.ini"
-	crypt_key string = "n5M7rBYZvO+2Oq6SeZIyIeoV44AY3hlrG/u/ouTu8lQ6ZY71We9XGJsb97Ud3XyI"
+	crypt_key string = "jNJ0vKs0UdVOUlZErwLrTM9fnJSyn3Bk"
 )
 
 func (cd *AGG_config_manager) init() {
@@ -52,15 +52,17 @@ func GetConfig() (AGG_config_manager, bool) {
 		ln := scanner.Text()
 		if strings.Index(ln, "Cloudlog_api_key =") == 0 {
 			ekey := ln[18:]
-			eba := []byte(ekey)
-			key := []byte(crypt_key)
-			var dba []byte
-			dba, err = decrypt(key, eba)
-			if err != nil {
-				agg_logger.Get().Log(err.Error(), "")
-				return cd, false
+			if len(ekey) > 0 {
+				eba := []byte(ekey)
+				key := []byte(crypt_key)
+				var dba []byte
+				dba, err = decrypt(key, eba)
+				if err != nil {
+					agg_logger.Get().Log(err.Error(), "")
+					return cd, false
+				}
+				cd.Cloudlog_api_key = string(dba)
 			}
-			cd.Cloudlog_api_key = string(dba)
 		}
 		if strings.Index(ln, "Station_profile_id =") == 0 {
 			cd.Station_profile_id = ln[20:]

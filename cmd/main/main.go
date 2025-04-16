@@ -2,11 +2,27 @@ package main
 
 import (
 	"CloudlogAutoLogger/internal/agg_config_manager"
+	"CloudlogAutoLogger/internal/agg_logger"
+	"CloudlogAutoLogger/internal/agg_udp"
 	"bufio"
 	"fmt"
 	"os"
 	"strconv"
+	"time"
 )
+
+type Listeners struct {
+	Cloudlog_api_key   string
+	Station_profile_id string
+	Port               int
+
+	client_name string // Name of broadcasting app (e.g. WSJTX, JS8CALL, VARAC)
+
+	// thread control
+	verbose    bool
+	endFlag    bool
+	threadFlag bool
+}
 
 var listeners_list = []*Listeners{}
 
@@ -43,6 +59,7 @@ func main() {
 				if text == "R" {
 					run()
 				}
+				fmt.Print("\nEnter command (S,R or Q):")
 			}
 		}
 	} else {
@@ -56,10 +73,15 @@ ALLDONE:
 
 }
 
+func GetUserPromptText(prompt string) string {
+	fmt.Print(prompt)
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	return scanner.Text()
+}
+
 func set_config() {
 	var cd, _ = agg_config_manager.GetConfig()
-
-	scanner := bufio.NewScanner(os.Stdin)
 
 	fmt.Printf("Enter new values or leave blank to keep current value\n")
 	fmt.Printf("API key is from Cloudlog account\n")
@@ -67,32 +89,27 @@ func set_config() {
 	fmt.Printf("Leave port number as 0 to not enable that listener\n")
 	fmt.Printf("\n")
 
-	fmt.Printf("Cloud log API key:")
-	text := scanner.Text()
+	text := GetUserPromptText("Cloud log API key:")
 	if len(text) > 0 {
 		cd.Cloudlog_api_key = text
 	}
 
-	fmt.Printf("Station profile ID:")
-	text = scanner.Text()
+	text = GetUserPromptText("Station profile ID  (current value=" + cd.Station_profile_id + "):")
 	if len(text) > 0 {
 		cd.Station_profile_id = text
 	}
 
-	fmt.Printf("WSJTX port (current value=" + strconv.Itoa(cd.WSJTX_port) + "):")
-	text = scanner.Text()
+	text = GetUserPromptText("WSJTX port (current value=" + strconv.Itoa(cd.WSJTX_port) + "):")
 	if len(text) > 0 {
 		cd.WSJTX_port, _ = strconv.Atoi(text)
 	}
 
-	fmt.Printf("JS8Call port (current value=" + strconv.Itoa(cd.JS8Call_port) + "):")
-	text = scanner.Text()
+	text = GetUserPromptText("JS8Call port (current value=" + strconv.Itoa(cd.JS8Call_port) + "):")
 	if len(text) > 0 {
 		cd.JS8Call_port, _ = strconv.Atoi(text)
 	}
 
-	fmt.Printf("VARAC port (current value=" + strconv.Itoa(cd.VARAC_port) + "):")
-	text = scanner.Text()
+	text = GetUserPromptText("VARAC port (current value=" + strconv.Itoa(cd.VARAC_port) + "):")
 	if len(text) > 0 {
 		cd.VARAC_port, _ = strconv.Atoi(text)
 	}
@@ -141,4 +158,42 @@ func stop() {
 		s.Stop()
 	}
 	listeners_list = nil
+}
+
+func (cd *Listeners) Start() {
+	var portstg = strconv.Itoa(cd.Port)
+	agg_logger.Get().Log("***** Begin listener on port:", portstg)
+	for !cd.endFlag {
+		stat, udp_pkt := agg_udp.WaitOnUDP(cd.Port, 250, false)
+		if stat {
+			agg_logger.Get().Log("***** Begin packet ***** Port:", portstg)
+
+			pkt_stg := string(udp_pkt)
+			agg_logger.Get().Log(pkt_stg, "")
+
+			//flex_util.BinaryDump(udp_pkt)
+
+			//pkt_stg := string(udp_pkt[:])
+			// flds := strings.FieldsFunc(pkt_stg, split)
+			// for _, v := range flds {
+			// 	agg_logger.Get().Log(portStg, " "+v)
+			// }
+			agg_logger.Get().Log("***** End packet ***** Port:", portstg)
+		}
+		//time.Sleep(time.Millisecond)
+	}
+	cd.threadFlag = false
+}
+
+func (cd *Listeners) Stop() {
+	cd.endFlag = true
+	sleepTime := 2 * time.Second
+
+	for {
+		if !cd.threadFlag {
+			return
+		}
+
+		time.Sleep(sleepTime)
+	}
 }
