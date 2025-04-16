@@ -82,7 +82,7 @@ func GetConfig() AGG_config_manager {
 	return cd
 }
 
-func SetConfig(cd AGG_config_manager) bool {
+func SaveConfig(cd AGG_config_manager) bool {
 
 	// Open file
 	var filePtr *os.File

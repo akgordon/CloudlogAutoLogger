@@ -9,7 +9,7 @@ import (
 
 func (cd *listeners) start() {
 	var portstg = strconv.Itoa(cd.Port)
-	agg_logger.Get().Log("***** Begin WSJT-X listener on port:", portstg)
+	agg_logger.Get().Log("***** Begin listener on port:", portstg)
 	for !cd.endFlag {
 		stat, udp_pkt := agg_udp.WaitOnUDP(cd.Port, 250, false)
 		if stat {
