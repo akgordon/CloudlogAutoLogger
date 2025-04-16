@@ -70,7 +70,7 @@ ALLDONE:
 }
 
 func set_config() {
-	var cd = agg_config_manager.GetConfig()
+	var cd, _ = agg_config_manager.GetConfig()
 
 	scanner := bufio.NewScanner(os.Stdin)
 
@@ -115,15 +115,35 @@ func set_config() {
 
 func run() {
 
-	var cd = agg_config_manager.GetConfig()
-	if cd.Cloudlog_api_key != "" {
-		s := &listeners{endFlag: false, threadFlag: true, Port: 0}
-		listeners_list = append(listeners_list, s)
-	}
+	listeners_list = nil
+	cd, stat := agg_config_manager.GetConfig()
+	if stat {
+		if cd.Cloudlog_api_key != "" {
+			s := &listeners{endFlag: false, threadFlag: true, verbose: true}
 
-	// Start threads
-	for _, s := range listeners_list {
-		s.start()
+			if cd.JS8Call_port != 0 {
+				s.Port = cd.JS8Call_port
+				s.client_name = "JS8Call"
+				listeners_list = append(listeners_list, s)
+			}
+
+			if cd.WSJTX_port != 0 {
+				s.Port = cd.WSJTX_port
+				s.client_name = "WSJTX"
+				listeners_list = append(listeners_list, s)
+			}
+
+			if cd.VARAC_port != 0 {
+				s.Port = cd.VARAC_port
+				s.client_name = "VARAC"
+				listeners_list = append(listeners_list, s)
+			}
+		}
+
+		// Start threads
+		for _, s := range listeners_list {
+			go s.Start()
+		}
 	}
 
 }
@@ -131,7 +151,7 @@ func run() {
 func stop() {
 	// Shut down threads
 	for _, s := range listeners_list {
-		s.stop()
+		s.Stop()
 	}
 	listeners_list = nil
 }

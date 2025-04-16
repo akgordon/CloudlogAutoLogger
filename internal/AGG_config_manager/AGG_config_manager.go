@@ -30,7 +30,7 @@ func (cd *AGG_config_manager) init() {
 	cd.JS8Call_port = 0
 }
 
-func GetConfig() AGG_config_manager {
+func GetConfig() (AGG_config_manager, bool) {
 
 	// Setup return structure
 	var cd AGG_config_manager
@@ -42,7 +42,7 @@ func GetConfig() AGG_config_manager {
 	filePtr, err = os.Open(filename)
 	if err != nil {
 		agg_logger.Get().Log(err.Error(), "")
-		return nil
+		return cd, false
 	}
 	defer filePtr.Close()
 
@@ -58,7 +58,7 @@ func GetConfig() AGG_config_manager {
 			dba, err = decrypt(key, eba)
 			if err != nil {
 				agg_logger.Get().Log(err.Error(), "")
-				return nil
+				return cd, false
 			}
 			cd.Cloudlog_api_key = string(dba)
 		}
@@ -79,7 +79,7 @@ func GetConfig() AGG_config_manager {
 		}
 	}
 
-	return cd
+	return cd, true
 }
 
 func SaveConfig(cd AGG_config_manager) bool {

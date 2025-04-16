@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func (cd *listeners) start() {
+func (cd *listeners) Start() {
 	var portstg = strconv.Itoa(cd.Port)
 	agg_logger.Get().Log("***** Begin listener on port:", portstg)
 	for !cd.endFlag {
@@ -32,7 +32,7 @@ func (cd *listeners) start() {
 	cd.threadFlag = false
 }
 
-func (cd *listeners) stop() {
+func (cd *listeners) Stop() {
 	cd.endFlag = true
 	sleepTime := 2 * time.Second
 
