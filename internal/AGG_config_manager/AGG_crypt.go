@@ -1,4 +1,4 @@
-package AGG_config_manager
+package agg_config_manager
 
 import (
 	"crypto/aes"

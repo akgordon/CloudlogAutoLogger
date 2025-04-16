@@ -1,4 +1,4 @@
-package flex_logger
+package agg_logger
 
 import (
 	"fmt"
@@ -8,20 +8,20 @@ import (
 	"time"
 )
 
-type flex_logger struct {
+type agg_logger struct {
 	filePtr *os.File
 }
 
-var theLogger *flex_logger = nil
+var theLogger *agg_logger = nil
 
-func Get() *flex_logger {
+func Get() *agg_logger {
 	if theLogger == nil {
-		theLogger = &flex_logger{}
+		theLogger = &agg_logger{}
 	}
 	return theLogger
 }
 
-func (fl *flex_logger) Open(logName string) {
+func (fl *agg_logger) Open(logName string) {
 	// Open or create the log file
 	var err error
 
@@ -35,13 +35,13 @@ func (fl *flex_logger) Open(logName string) {
 	//log.SetOutput(fl.filePtr)
 }
 
-func (fl *flex_logger) Close() {
+func (fl *agg_logger) Close() {
 	if fl.filePtr != nil {
 		fl.filePtr.Close()
 	}
 }
 
-func (fl *flex_logger) Log(msg string, msg2 string) {
+func (fl *agg_logger) Log(msg string, msg2 string) {
 	msg = strings.ReplaceAll(msg, "\x00", "")
 	msg2 = strings.ReplaceAll(msg2, "\x00", "")
 
