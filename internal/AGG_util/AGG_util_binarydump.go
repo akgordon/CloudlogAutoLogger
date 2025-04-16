@@ -1,7 +1,7 @@
-package flex_util
+package AGG_util
 
 import (
-	"FlexSimpleCat/pkg/flex_logger"
+	"CloudlogAutoLogger/internal/AGG_logger"
 	"fmt"
 )
 
@@ -9,7 +9,7 @@ func BinaryDump(data []byte, length int, useLogger bool) {
 	const bytesPerLine = 16
 
 	if useLogger {
-		flex_logger.Get().Log("           0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F\n", "")
+		AGG_logger.Get().Log("           0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F\n", "")
 	} else {
 		fmt.Printf("           0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F\n")
 	}
@@ -55,7 +55,7 @@ func BinaryDump(data []byte, length int, useLogger bool) {
 
 		// Print
 		if useLogger {
-			flex_logger.Get().Log(outStg, "")
+			AGG_logger.Get().Log(outStg, "")
 		} else {
 			fmt.Println(outStg)
 		}
