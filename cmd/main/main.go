@@ -2,15 +2,25 @@ package main
 
 import (
 	"CloudlogAutoLogger/internal/agg_config_manager"
-	"CloudlogAutoLogger/internal/agg_wsjtx"
 	"bufio"
 	"fmt"
 	"os"
 )
 
 type listeners struct {
-	wsjtx_thread *agg_wsjtx.Wsjtx
+	Cloudlog_api_key   string
+	Station_profile_id string
+	Port               int
+
+	client_name string // Name of broadcasting app (e.g. WSJTX, JS8CALL, VARAC)
+
+	// thread control
+	verbose    bool
+	endFlag    bool
+	threadFlag bool
 }
+
+var listeners_list = []*listeners{}
 
 func main() {
 
@@ -59,9 +69,22 @@ ALLDONE:
 
 func run() {
 
-	c := agg_config_manager.Get()
-	if c.GetConfig() {
-
+	var cd = agg_config_manager.GetConfig()
+	if cd.Cloudlog_api_key != "" {
+		s := &listeners{endFlag: false, threadFlag: true, Port: 0}
+		listeners_list = append(listeners_list, s)
 	}
 
+	// Start threads
+	for _, s := range listeners_list {
+		s.start()
+	}
+
+}
+
+func stop() {
+	// Shut down threads
+	for _, s := range listeners_list {
+		s.stop()
+	}
 }

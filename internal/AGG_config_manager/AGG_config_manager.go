@@ -22,16 +22,6 @@ const (
 	crypt_key string = "n5M7rBYZvO+2Oq6SeZIyIeoV44AY3hlrG/u/ouTu8lQ6ZY71We9XGJsb97Ud3XyI"
 )
 
-var theConfig_manager *AGG_config_manager = nil
-
-func Get() *AGG_config_manager {
-	if theConfig_manager == nil {
-		theConfig_manager = &AGG_config_manager{}
-		theConfig_manager.init()
-	}
-	return theConfig_manager
-}
-
 func (cd *AGG_config_manager) init() {
 	cd.Cloudlog_api_key = ""
 	cd.Station_profile_id = ""
@@ -40,9 +30,10 @@ func (cd *AGG_config_manager) init() {
 	cd.JS8Call_port = 0
 }
 
-func (cd *AGG_config_manager) GetConfig() bool {
+func GetConfig() AGG_config_manager {
 
-	// Clear config
+	// Setup return structure
+	var cd AGG_config_manager
 	cd.init()
 
 	// Open file
@@ -51,7 +42,7 @@ func (cd *AGG_config_manager) GetConfig() bool {
 	filePtr, err = os.Open(filename)
 	if err != nil {
 		agg_logger.Get().Log(err.Error(), "")
-		return false
+		return nil
 	}
 	defer filePtr.Close()
 
@@ -67,7 +58,7 @@ func (cd *AGG_config_manager) GetConfig() bool {
 			dba, err = decrypt(key, eba)
 			if err != nil {
 				agg_logger.Get().Log(err.Error(), "")
-				return false
+				return nil
 			}
 			cd.Cloudlog_api_key = string(dba)
 		}
@@ -86,14 +77,12 @@ func (cd *AGG_config_manager) GetConfig() bool {
 			port := ln[14:]
 			cd.JS8Call_port, _ = strconv.Atoi(port)
 		}
-
-		return true
 	}
 
-	return true
+	return cd
 }
 
-func (cd *AGG_config_manager) SetConfig() bool {
+func SetConfig(cd AGG_config_manager) bool {
 
 	// Open file
 	var filePtr *os.File

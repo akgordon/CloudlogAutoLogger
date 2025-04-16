@@ -1,4 +1,4 @@
-package agg_wsjtx
+package main
 
 import (
 	"CloudlogAutoLogger/internal/agg_logger"
@@ -7,38 +7,7 @@ import (
 	"time"
 )
 
-type Wsjtx struct {
-	Cloudlog_api_key   string
-	Station_profile_id string
-	Port               int
-
-	// thread control
-	verbose    bool
-	endFlag    bool
-	threadFlag bool
-}
-
-// Factory
-var theWSJTX *Wsjtx = nil
-
-func Get() *Wsjtx {
-	if theWSJTX == nil {
-		theWSJTX = &Wsjtx{}
-		theWSJTX.init()
-	}
-	return theWSJTX
-}
-
-func (cd *Wsjtx) init() {
-	cd.Cloudlog_api_key = ""
-	cd.Station_profile_id = ""
-	cd.Port = 0
-	cd.verbose = false
-	cd.endFlag = false
-	cd.threadFlag = false
-}
-
-func (cd *Wsjtx) start() {
+func (cd *listeners) start() {
 	var portstg = strconv.Itoa(cd.Port)
 	agg_logger.Get().Log("***** Begin WSJT-X listener on port:", portstg)
 	for !cd.endFlag {
@@ -63,7 +32,7 @@ func (cd *Wsjtx) start() {
 	cd.threadFlag = false
 }
 
-func (cd *Wsjtx) stop() {
+func (cd *listeners) stop() {
 	cd.endFlag = true
 	sleepTime := 2 * time.Second
 
