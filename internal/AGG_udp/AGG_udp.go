@@ -23,27 +23,21 @@ func WaitOnUDP(port int, timeoutMilliseconds int, doLog bool) (bool, []byte) {
 	portNum := strconv.Itoa(port)
 	service := hostName + ":" + portNum
 
-	udpAddr, err := net.ResolveUDPAddr("udp4", service)
-
-	if err != nil {
-		agg_logger.Get().Log(err.Error(), "")
-		return false, nil
-	}
+	udpAddr := net.UDPAddr{Port: port, IP: net.ParseIP("0.0.0.0")}
 
 	// setup listener for incoming UDP connection
-	ln, err := net.ListenUDP("udp", udpAddr)
-	ln.SetReadDeadline(time.Now().Add(time.Millisecond * time.Duration(timeoutMilliseconds)))
-
+	ln, err := net.ListenUDP("udp", &udpAddr)
 	if err != nil {
 		agg_logger.Get().Log(err.Error(), "")
 		return false, nil
 	}
+	defer ln.Close()
+
+	ln.SetReadDeadline(time.Now().Add(time.Millisecond * time.Duration(timeoutMilliseconds)))
 
 	if doLog {
 		agg_logger.Get().Log("UDP server up and listening on "+service, "")
 	}
-
-	defer ln.Close()
 
 	// Now block until get UDP packet
 	buffer := make([]byte, 1024)

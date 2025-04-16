@@ -123,21 +123,23 @@ func run() {
 	cd, stat := agg_config_manager.GetConfig()
 	if stat {
 		if cd.Cloudlog_api_key != "" {
-			s := &Listeners{endFlag: false, threadFlag: true, verbose: true}
 
 			if cd.JS8Call_port != 0 {
+				s := &Listeners{endFlag: false, threadFlag: true, verbose: true}
 				s.Port = cd.JS8Call_port
 				s.client_name = "JS8Call"
 				listeners_list = append(listeners_list, s)
 			}
 
 			if cd.WSJTX_port != 0 {
+				s := &Listeners{endFlag: false, threadFlag: true, verbose: true}
 				s.Port = cd.WSJTX_port
 				s.client_name = "WSJTX"
 				listeners_list = append(listeners_list, s)
 			}
 
 			if cd.VARAC_port != 0 {
+				s := &Listeners{endFlag: false, threadFlag: true, verbose: true}
 				s.Port = cd.VARAC_port
 				s.client_name = "VARAC"
 				listeners_list = append(listeners_list, s)
@@ -196,4 +198,17 @@ func (cd *Listeners) Stop() {
 
 		time.Sleep(sleepTime)
 	}
+}
+
+func (cd *Listeners) js8call(pkt_stg string) {
+
+	//Example UDP packet.
+	//<call:5>ZZ0ZZ <gridsquare:0> <mode:4>MFSK <submode:3>JS8 <rst_sent:3>556 <rst_rcvd:3>556 <qso_date:8>20250416 <time_on:6>211335 <qso_date_off:8>20250416 <time_off:6>211335 <band:3>20m <freq:9>14.106279 <station_callsign:5>N7AKG <my_gridsquare:6>CN85SL <operator:5>N7AKG <eor>\x00\
+
+}
+
+func (cd *Listeners) varac(pkt_stg string) {
+	//	Example:
+	// "<command:3>Log<parameters:245><CALL:5>zz0zz <MODE:7>DYNAMIC <SUBMODE:7>VARA HF <RST_SENT:3>+01 <RST_RCVD:3>+02 <QSO_DATE:8>20250416 <TIME_ON:6>215130 <QSO_DATE_OFF:8>20250416 <TIME_OFF:6>215131 <BAND:3>20m <STATION_CALLSIGN:5>N7AKG <TX_PWR:0> <COMMENT:14>QSO with VarAC <EOR>\x00\
+
 }
