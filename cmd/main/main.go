@@ -8,20 +8,7 @@ import (
 	"strconv"
 )
 
-type listeners struct {
-	Cloudlog_api_key   string
-	Station_profile_id string
-	Port               int
-
-	client_name string // Name of broadcasting app (e.g. WSJTX, JS8CALL, VARAC)
-
-	// thread control
-	verbose    bool
-	endFlag    bool
-	threadFlag bool
-}
-
-var listeners_list = []*listeners{}
+var listeners_list = []*Listeners{}
 
 func main() {
 
@@ -119,7 +106,7 @@ func run() {
 	cd, stat := agg_config_manager.GetConfig()
 	if stat {
 		if cd.Cloudlog_api_key != "" {
-			s := &listeners{endFlag: false, threadFlag: true, verbose: true}
+			s := &Listeners{endFlag: false, threadFlag: true, verbose: true}
 
 			if cd.JS8Call_port != 0 {
 				s.Port = cd.JS8Call_port

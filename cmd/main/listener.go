@@ -7,7 +7,20 @@ import (
 	"time"
 )
 
-func (cd *listeners) Start() {
+type Listeners struct {
+	Cloudlog_api_key   string
+	Station_profile_id string
+	Port               int
+
+	client_name string // Name of broadcasting app (e.g. WSJTX, JS8CALL, VARAC)
+
+	// thread control
+	verbose    bool
+	endFlag    bool
+	threadFlag bool
+}
+
+func (cd *Listeners) Start() {
 	var portstg = strconv.Itoa(cd.Port)
 	agg_logger.Get().Log("***** Begin listener on port:", portstg)
 	for !cd.endFlag {
@@ -32,7 +45,7 @@ func (cd *listeners) Start() {
 	cd.threadFlag = false
 }
 
-func (cd *listeners) Stop() {
+func (cd *Listeners) Stop() {
 	cd.endFlag = true
 	sleepTime := 2 * time.Second
 
