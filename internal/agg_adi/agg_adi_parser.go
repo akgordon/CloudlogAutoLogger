@@ -45,25 +45,6 @@ func Parse_adi(pkt_stg string) map[string]string {
 	return adi_fields
 }
 
-// <call:5>N9EAT
-// <band:4>70cm
-// <mode:3>SSB
-// <freq:10>432.166976
-// <qso_date:8>20190616
-// <time_on:6>170600
-// <time_off:6>170600
-// <rst_rcvd:2>59
-// <rst_sent:2>55
-// <qsl_rcvd:1>N
-// <qsl_sent:1>N
-// <country:24>United States Of America
-// <gridsquare:4>EN42
-// <sat_mode:3>U/V
-// <sat_name:4>AO-7
-// <prop_mode:3>SAT
-// <name:5>Marty
-// <eor>"
-
 func Encode_adi(fields map[string]string) string {
 	adi := ""
 

@@ -10,6 +10,7 @@ import (
 )
 
 type AGG_config_manager struct {
+	Cloudlog_url       string
 	Cloudlog_api_key   string
 	Station_profile_id string
 	WSJTX_port         int
@@ -23,6 +24,7 @@ const (
 )
 
 func (cd *AGG_config_manager) init() {
+	cd.Cloudlog_url = ""
 	cd.Cloudlog_api_key = ""
 	cd.Station_profile_id = ""
 	cd.WSJTX_port = 0
@@ -64,6 +66,10 @@ func GetConfig() (AGG_config_manager, bool) {
 				cd.Cloudlog_api_key = string(dba)
 			}
 		}
+
+		if strings.Index(ln, "Cloudlog_url =") == 0 {
+			cd.Cloudlog_url = ln[14:]
+		}
 		if strings.Index(ln, "Station_profile_id =") == 0 {
 			cd.Station_profile_id = ln[20:]
 		}
@@ -100,6 +106,7 @@ func SaveConfig(cd AGG_config_manager) bool {
 	ekey, err := encrypt(cd.Cloudlog_api_key, key)
 
 	filePtr.WriteString("Cloudlog_api_key =" + ekey + "\n")
+	filePtr.WriteString("Cloudlog_url =" + cd.Cloudlog_url + "\n")
 	filePtr.WriteString("Station_profile_id =" + cd.Station_profile_id + "\n")
 	filePtr.WriteString("WSJTX_port =" + fmt.Sprint(cd.WSJTX_port) + "\n")
 	filePtr.WriteString("VARAC_port =" + fmt.Sprint(cd.VARAC_port) + "\n")

@@ -13,6 +13,7 @@ import (
 )
 
 type Listeners struct {
+	Cloudlog_url       string
 	Cloudlog_api_key   string
 	Station_profile_id string
 	Port               int
@@ -108,7 +109,12 @@ func set_config() {
 	fmt.Printf("Leave port number as 0 to not enable that listener\n")
 	fmt.Printf("\n")
 
-	text := GetUserPromptText("Cloud log API key:")
+	text := GetUserPromptText("Cloudlog URL  (current value=" + cd.Cloudlog_url + "):")
+	if len(text) > 0 {
+		cd.Station_profile_id = text
+	}
+
+	text = GetUserPromptText("Cloud log API key:")
 	if len(text) > 0 {
 		cd.Cloudlog_api_key = text
 	}
@@ -144,21 +150,21 @@ func run() {
 		if cd.Cloudlog_api_key != "" {
 
 			if cd.JS8Call_port != 0 {
-				s := &Listeners{endFlag: false, threadFlag: true, verbose: true}
+				s := &Listeners{Cloudlog_url: cd.Cloudlog_url, Cloudlog_api_key: cd.Cloudlog_api_key, Station_profile_id: cd.Station_profile_id, endFlag: false, threadFlag: true, verbose: true}
 				s.Port = cd.JS8Call_port
 				s.client_name = "JS8Call"
 				listeners_list = append(listeners_list, s)
 			}
 
 			if cd.WSJTX_port != 0 {
-				s := &Listeners{endFlag: false, threadFlag: true, verbose: true}
+				s := &Listeners{Cloudlog_url: cd.Cloudlog_url, Cloudlog_api_key: cd.Cloudlog_api_key, Station_profile_id: cd.Station_profile_id, endFlag: false, threadFlag: true, verbose: true}
 				s.Port = cd.WSJTX_port
 				s.client_name = "WSJTX"
 				listeners_list = append(listeners_list, s)
 			}
 
 			if cd.VARAC_port != 0 {
-				s := &Listeners{endFlag: false, threadFlag: true, verbose: true}
+				s := &Listeners{Cloudlog_url: cd.Cloudlog_url, Cloudlog_api_key: cd.Cloudlog_api_key, Station_profile_id: cd.Station_profile_id, endFlag: false, threadFlag: true, verbose: true}
 				s.Port = cd.VARAC_port
 				s.client_name = "VARAC"
 				listeners_list = append(listeners_list, s)
