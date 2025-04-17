@@ -29,10 +29,8 @@ func (fl *agg_logger) Open(logName string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//defer fl.filePtr.Close()
 
-	// Set log output to the file
-	//log.SetOutput(fl.filePtr)
+	fmt.Printf("Logging to file:%s", logName)
 }
 
 func (fl *agg_logger) Close() {

@@ -15,7 +15,7 @@ type AGG_config_manager struct {
 	Station_profile_id string
 	WSJTX_port         int
 	VARAC_port         int
-	JS8Call_port       int
+	JS8CALL_port       int
 }
 
 const (
@@ -29,7 +29,7 @@ func (cd *AGG_config_manager) init() {
 	cd.Station_profile_id = ""
 	cd.WSJTX_port = 0
 	cd.VARAC_port = 0
-	cd.JS8Call_port = 0
+	cd.JS8CALL_port = 0
 }
 
 func GetConfig() (AGG_config_manager, bool) {
@@ -85,9 +85,9 @@ func GetConfig() (AGG_config_manager, bool) {
 			cd.VARAC_port, _ = strconv.Atoi(port)
 		}
 
-		if strings.Index(ln, "JS8Call_port =") == 0 {
+		if strings.Index(ln, "JS8CALL_port =") == 0 {
 			port := ln[14:]
-			cd.JS8Call_port, _ = strconv.Atoi(port)
+			cd.JS8CALL_port, _ = strconv.Atoi(port)
 		}
 	}
 
@@ -113,7 +113,7 @@ func SaveConfig(cd AGG_config_manager) bool {
 	filePtr.WriteString("Station_profile_id =" + cd.Station_profile_id + "\n")
 	filePtr.WriteString("WSJTX_port =" + fmt.Sprint(cd.WSJTX_port) + "\n")
 	filePtr.WriteString("VARAC_port =" + fmt.Sprint(cd.VARAC_port) + "\n")
-	filePtr.WriteString("JS8Call_port =" + fmt.Sprint(cd.JS8Call_port) + "\n")
+	filePtr.WriteString("JS8CALL_port =" + fmt.Sprint(cd.JS8CALL_port) + "\n")
 
 	return true
 }

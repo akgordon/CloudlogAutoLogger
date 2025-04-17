@@ -37,15 +37,15 @@ func BuildListener(mode string) (Listeners, bool) {
 	if stat {
 		if cd.Cloudlog_api_key != "" {
 			if mode == "JS8CALL" {
-				if cd.JS8Call_port != 0 {
-					rtnListener.Port = cd.JS8Call_port
+				if cd.JS8CALL_port != 0 {
+					rtnListener.Port = cd.JS8CALL_port
 					rtnListener.client_name = "JS8CALL"
 					return rtnListener, true
 				}
 			}
 
 			if mode == "VARAC" {
-				if cd.JS8Call_port != 0 {
+				if cd.JS8CALL_port != 0 {
 					rtnListener.Port = cd.VARAC_port
 					rtnListener.client_name = "VARAC"
 					return rtnListener, true
@@ -53,7 +53,7 @@ func BuildListener(mode string) (Listeners, bool) {
 			}
 
 			if mode == "WSJTX" {
-				if cd.JS8Call_port != 0 {
+				if cd.JS8CALL_port != 0 {
 					rtnListener.Port = cd.WSJTX_port
 					rtnListener.client_name = "WSJTX"
 					return rtnListener, true
@@ -76,16 +76,16 @@ func (cd *Listeners) Start() {
 			pkt_stg := string(udp_pkt)
 			agg_logger.Get().Log(pkt_stg, "")
 
-			if cd.client_name == "JS8Call" {
+			if cd.client_name == "JS8CALL" {
 				cd.Js8call(pkt_stg)
 			}
 
 			if cd.client_name == "VARAC" {
-				cd.Varac(pkt_stg)
+				cd.VARAC(pkt_stg)
 			}
 
 			if cd.client_name == "WSJTX" {
-				cd.Wsjtx(pkt_stg)
+				cd.WSJTX(pkt_stg)
 			}
 
 			agg_logger.Get().Log("***** End packet ***** Port:", portstg)
@@ -93,6 +93,7 @@ func (cd *Listeners) Start() {
 		//time.Sleep(time.Millisecond)
 	}
 	cd.threadFlag = false
+	agg_logger.Get().Log("***** Listener stopped on port:", portstg)
 }
 
 func (cd *Listeners) Stop() {
@@ -121,16 +122,16 @@ func TestListener(mode string) {
 	if mode == "VARAC" {
 		l, stat := BuildListener("VARAC")
 		if stat {
-			varac_sample := "<command:3>Log<parameters:245><CALL:5>zz0zz <MODE:7>DYNAMIC <SUBMODE:7>VARA HF <RST_SENT:3>+01 <RST_RCVD:3>+02 <QSO_DATE:8>20250416 <TIME_ON:6>215130 <QSO_DATE_OFF:8>20250416 <TIME_OFF:6>215131 <BAND:3>20m <STATION_CALLSIGN:5>N7AKG <TX_PWR:0> <COMMENT:14>QSO with VarAC <EOR>"
-			l.Varac(varac_sample)
+			VARAC_sample := "<command:3>Log<parameters:245><CALL:5>zz0zz <MODE:7>DYNAMIC <SUBMODE:7>VARA HF <RST_SENT:3>+01 <RST_RCVD:3>+02 <QSO_DATE:8>20250416 <TIME_ON:6>215130 <QSO_DATE_OFF:8>20250416 <TIME_OFF:6>215131 <BAND:3>20m <STATION_CALLSIGN:5>N7AKG <TX_PWR:0> <COMMENT:14>QSO with VARAC <EOR>"
+			l.VARAC(VARAC_sample)
 		}
 	}
 
 	if mode == "WSJTX" {
 		l, stat := BuildListener("WSJTX")
 		if stat {
-			wsjtx_sample := "<call:5>zz0zz <gridsquare:4>EM54 <mode:3>FT8 <rst_sent:0> <rst_rcvd:0> <qso_date:8>20250417 <time_on:6>043403 <qso_date_off:8>20250417 <time_off:6>043459 <band:3>20m <freq:9>14.075307 <station_callsign:5>N7AKG <my_gridsquare:6>CN85SL <tx_pwr:2>50 <comment:3>FT8 <operator:5>N7AKG <eor>"
-			l.Wsjtx(wsjtx_sample)
+			WSJTX_sample := "<call:5>zz0zz <gridsquare:4>EM54 <mode:3>FT8 <rst_sent:0> <rst_rcvd:0> <qso_date:8>20250417 <time_on:6>043403 <qso_date_off:8>20250417 <time_off:6>043459 <band:3>20m <freq:9>14.075307 <station_callsign:5>N7AKG <my_gridsquare:6>CN85SL <tx_pwr:2>50 <comment:3>FT8 <operator:5>N7AKG <eor>"
+			l.WSJTX(WSJTX_sample)
 		}
 	}
 }
@@ -147,9 +148,9 @@ func (cd *Listeners) Js8call(pkt_stg string) {
 
 }
 
-func (cd *Listeners) Varac(pkt_stg string) {
+func (cd *Listeners) VARAC(pkt_stg string) {
 	//	Example:
-	// <command:3>Log<parameters:245><CALL:5>zz0zz <MODE:7>DYNAMIC <SUBMODE:7>VARA HF <RST_SENT:3>+01 <RST_RCVD:3>+02 <QSO_DATE:8>20250416 <TIME_ON:6>215130 <QSO_DATE_OFF:8>20250416 <TIME_OFF:6>215131 <BAND:3>20m <STATION_CALLSIGN:5>N7AKG <TX_PWR:0> <COMMENT:14>QSO with VarAC <EOR>\x00\
+	// <command:3>Log<parameters:245><CALL:5>zz0zz <MODE:7>DYNAMIC <SUBMODE:7>VARA HF <RST_SENT:3>+01 <RST_RCVD:3>+02 <QSO_DATE:8>20250416 <TIME_ON:6>215130 <QSO_DATE_OFF:8>20250416 <TIME_OFF:6>215131 <BAND:3>20m <STATION_CALLSIGN:5>N7AKG <TX_PWR:0> <COMMENT:14>QSO with VARAC <EOR>\x00\
 	//	adi_fields := agg_adi.Parse_adi(pkt_stg)
 
 	// Parse the ADI to clean it up then re-strigify it
@@ -158,7 +159,7 @@ func (cd *Listeners) Varac(pkt_stg string) {
 	send2Cloudlog(cd, adi_stg)
 }
 
-func (cd *Listeners) Wsjtx(pkt_stg string) {
+func (cd *Listeners) WSJTX(pkt_stg string) {
 	//	Example:
 	// <call:5>zz0zz <gridsquare:4>EM54 <mode:3>FT8 <rst_sent:0> <rst_rcvd:0> <qso_date:8>20250417 <time_on:6>043403 <qso_date_off:8>20250417 <time_off:6>043459 <band:3>20m <freq:9>14.075307 <station_callsign:5>N7AKG <my_gridsquare:6>CN85SL <tx_pwr:2>50 <comment:3>FT8 <operator:5>N7AKG <eor>\x00\
 

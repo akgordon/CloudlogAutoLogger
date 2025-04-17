@@ -3,6 +3,7 @@ package main
 import (
 	"CloudlogAutoLogger/internal/agg_config_manager"
 	"CloudlogAutoLogger/internal/agg_listeners"
+	"CloudlogAutoLogger/internal/agg_logger"
 	"bufio"
 	"fmt"
 	"os"
@@ -25,8 +26,12 @@ func main() {
 		fmt.Print("\n")
 		fmt.Print(" To run this program without prompt add these command line options:\n")
 		fmt.Print("    run  - to start listening for UDP packets per configuration settings\n")
-		fmt.Print("    log  - to log activity\n")
+		fmt.Print("    log  - to log activity. Omit for no logging.\n")
+		fmt.Print("    Example: cloudlogautologger.exe run log\n")
 		fmt.Print("\n")
+
+		// Start Logger if in interactive mode
+		agg_logger.Get().Open("CloundlogAutoLogger.log")
 
 		scanner := bufio.NewScanner(os.Stdin)
 		for {
@@ -60,12 +65,12 @@ func main() {
 			}
 		}
 	} else {
-		// Check for command line options
-
+		autoRun()
 	}
 
 ALLDONE:
 	stop()
+	agg_logger.Get().Close()
 	os.Exit(0)
 
 }
@@ -106,9 +111,9 @@ func set_config() {
 		cd.WSJTX_port, _ = strconv.Atoi(text)
 	}
 
-	text = GetUserPromptText("JS8Call port (current value=" + strconv.Itoa(cd.JS8Call_port) + "):")
+	text = GetUserPromptText("JS8CALL port (current value=" + strconv.Itoa(cd.JS8CALL_port) + "):")
 	if len(text) > 0 {
-		cd.JS8Call_port, _ = strconv.Atoi(text)
+		cd.JS8CALL_port, _ = strconv.Atoi(text)
 	}
 
 	text = GetUserPromptText("VARAC port (current value=" + strconv.Itoa(cd.VARAC_port) + "):")
@@ -157,4 +162,41 @@ func stop() {
 		s.Stop()
 	}
 	listeners_list = nil
+}
+
+func autoRun() {
+	args := os.Args
+
+	// Check for command line options
+	doRun := false
+	doLog := false
+
+	for i := 1; i < len(args); i++ {
+		if args[i] == "run" {
+			doRun = true
+		}
+
+		if args[i] == "log" {
+			doLog = true
+		}
+	}
+
+	if doLog {
+		agg_logger.Get().Open("CloundlogAutoLogger.log")
+	}
+
+	if doRun {
+		run()
+	}
+
+	scanner := bufio.NewScanner(os.Stdin)
+	for {
+		fmt.Print("\n\nPress ENTER to exit\n\n")
+		for scanner.Scan() {
+			scanner.Text()
+			stop()
+			agg_logger.Get().Close()
+			os.Exit(0)
+		}
+	}
 }
