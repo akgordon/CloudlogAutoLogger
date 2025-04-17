@@ -7,30 +7,18 @@ import (
 	"net/http"
 )
 
-type Cloudlog_payload struct {
-	Cloudlog_api_key   string
-	Station_profile_id string
-	Payload            string
-}
-
-func (cp *Cloudlog_payload) SendADI2Cloudlog() bool {
-	// Convert payload to string map
-	_payload := make(map[string]string)
-
-	_payload["key"] = cp.Cloudlog_api_key
-	_payload["station_profile_id"] = cp.Station_profile_id
-	_payload["type"] = "adif"
-	_payload["string"] = cp.Payload
+func SendADI2Cloudlog(url string, payload map[string]string) bool {
 
 	// Convert payload to JSON
-	_jsonPayload, err := json.Marshal(_payload)
+	_jsonPayload, err := MapToJSONStringNoEscape(payload)
 	if err != nil {
 		agg_logger.Get().Log("Error marshaling JSON:", err.Error())
 		return false
 	}
+	_jsonBytes := []byte(_jsonPayload)
 
 	// Create the HTTP request
-	_req, err := http.NewRequest("POST", "https://n7akg.cloudlog.co.uk/index.php/api/qso", bytes.NewBuffer(_jsonPayload))
+	_req, err := http.NewRequest("POST", url, bytes.NewBuffer(_jsonBytes))
 	if err != nil {
 		agg_logger.Get().Log("Error creating request:", err.Error())
 		return false
@@ -49,4 +37,17 @@ func (cp *Cloudlog_payload) SendADI2Cloudlog() bool {
 	defer resp.Body.Close()
 
 	return true
+}
+
+func MapToJSONStringNoEscape(data map[string]string) (string, error) {
+	var buf bytes.Buffer
+	encoder := json.NewEncoder(&buf)
+	encoder.SetEscapeHTML(false) // Disable escaping of HTML characters
+
+	if err := encoder.Encode(data); err != nil {
+		return "", err
+	}
+
+	// Remove the trailing newline added by encoder.Encode
+	return buf.String()[:buf.Len()-1], nil
 }
