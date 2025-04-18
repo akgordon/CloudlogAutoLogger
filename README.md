@@ -45,8 +45,7 @@ Usage
    - Command line use example:  "cloundlogautologger run"   or "cloundlogautologger run log"  (if want logging to file)
 
 5 To stop program
-   - If in interactive mode then press "ENTER" at anytime in the program's window
-   - If using command line mode then ctrl-C or just close the program's window
+   - Press "ENTER" at anytime in the program's window
 
 
 In you 3rd party programs, set your UDP server to local host address "127.0.0.1" and UDP port to any value you want. 
