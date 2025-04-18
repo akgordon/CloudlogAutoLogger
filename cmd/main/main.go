@@ -18,6 +18,7 @@ func main() {
 	if len(args) < 2 {
 		fmt.Print("Welcome to CloudLog Auto Logger\n")
 		fmt.Print("   by the Alan Gordon Group\n")
+		fmt.Print("           v0.1\n")
 		fmt.Print("\n")
 		fmt.Print(" Enter one of the following commands:\n")
 		fmt.Print("    S  for Set or update configuration\n")
