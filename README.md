@@ -1,6 +1,13 @@
 # CloudlogAutoLogger
 Provide automatic logging to CloudLog for multiple 3rd party applications
 
+This program and source my be freely copied and used as you wish. There is NO warranty and your use is "AS IS". 
+Please contact me if you have suggests or additions you would like to make.
+
+Hope this helps your logging to the CloundLog application. 
+
+Alan N7AKG  (N7AKG@ARRL.net)
+
 --------------------------------------
 Install and build
 --------------------------------------
