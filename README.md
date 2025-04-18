@@ -16,11 +16,16 @@ The GO language is supported on most PC OSs and
 this program does not need any UI so should work well in any environment.
 
 Suggested compile steps:
-   1 Create a directory "build" 
-   2 Compile using the GO BUILD command:
-      **go build -o build/cloudlogautologger.exe ./cmd/main**
 
-A Windows executable can be downloaded from "http://www.akgordon.com/ham/cloudlogger-v0_1.zip"
+   1 Create a directory "build" 
+
+   2 Compile using the GO BUILD command:
+      **go build -o build/cloudlogger.exe ./cmd/main**
+
+   (See the build.bat for example compile)
+
+A **Windows** executable can be downloaded from 
+"http://www.akgordon.com/ham/cloudlogger.zip"
 
 ---------------------------------------
 Usage
@@ -42,7 +47,7 @@ Usage
    - The xxxx.ini file is a simple text file, but the API key is encrypted so do not edit that.
 
 4 Now you can either run the program by selecting the "R" option, or have it run automatically by using command line arguments.
-   - Command line use example:  "cloundlogautologger run"   or "cloundlogautologger run log"  (if want logging to file)
+   - Command line use example:  "cloundlogger run"   or "cloundlogger run log"  (if want logging to file)
 
 5 To stop program
    - Press "ENTER" at anytime in the program's window

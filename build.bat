@@ -1,2 +1,2 @@
 mkdir build
-go build -o build/cloudlogautologger.exe ./cmd/main
+go build -o build/cloudlogger.exe ./cmd/main
