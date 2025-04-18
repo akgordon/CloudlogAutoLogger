@@ -13,6 +13,8 @@ Suggested compile steps:
    2 Compile using the GO BUILD command:
       **go build -o build/cloudlogautologger.exe ./cmd/main**
 
+A Windows executable can be downloaded from "http://www.akgordon.com/ham/cloudlogautologger.zip"
+
 ---------------------------------------
 Usage
 ---------------------------------------
