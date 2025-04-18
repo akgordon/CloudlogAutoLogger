@@ -1,7 +1,7 @@
 package agg_config_manager
 
 import (
-	"CloudlogAutoLogger/internal/agg_logger"
+	agg_logger "CloudlogAutoLogger/internal/AGG_logger"
 	"bufio"
 	"fmt"
 	"os"

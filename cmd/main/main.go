@@ -1,9 +1,9 @@
 package main
 
 import (
-	"CloudlogAutoLogger/internal/agg_config_manager"
+	agg_config_manager "CloudlogAutoLogger/internal/AGG_config_manager"
+	agg_logger "CloudlogAutoLogger/internal/AGG_logger"
 	"CloudlogAutoLogger/internal/agg_listeners"
-	"CloudlogAutoLogger/internal/agg_logger"
 	"bufio"
 	"fmt"
 	"os"

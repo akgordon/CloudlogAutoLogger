@@ -1,7 +1,7 @@
 package agg_tcp
 
 import (
-	"CloudlogAutoLogger/internal/agg_logger"
+	agg_logger "CloudlogAutoLogger/internal/AGG_logger"
 	"bytes"
 	"encoding/json"
 	"net/http"

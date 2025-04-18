@@ -1,11 +1,11 @@
 package agg_listeners
 
 import (
+	agg_config_manager "CloudlogAutoLogger/internal/AGG_config_manager"
+	agg_logger "CloudlogAutoLogger/internal/AGG_logger"
+	agg_udp "CloudlogAutoLogger/internal/AGG_udp"
 	"CloudlogAutoLogger/internal/agg_adi"
-	"CloudlogAutoLogger/internal/agg_config_manager"
-	"CloudlogAutoLogger/internal/agg_logger"
 	"CloudlogAutoLogger/internal/agg_tcp"
-	"CloudlogAutoLogger/internal/agg_udp"
 	"strconv"
 	"time"
 )
