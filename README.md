@@ -18,6 +18,7 @@ Usage
 ---------------------------------------
 
 1 Copy the executable to any directory of your choice
+
 2 Run the program to set parameters. You will need:
    - A Cloudlog API key
    - A Station profile id - This can be found when editing a station profile on CloudLog. its a number and displayed in the URL string.
@@ -25,10 +26,12 @@ Usage
    - The UDP port number for WSJT-X  (optional)
    - The UDP port number for JS8CALL  (optional)
    - The UDP port number for VARAC   (optional)
+
 3 Select the "S" option.
    - This will run through a list of options for you to respond
    - The result is an xxxxx.ini file
    - The xxxx.ini file is a simple text file, but the API key is encrypted so do not edit that.
+   
 4 Now you can either run the program by selecting the "R" option, or have it run automatically by using command line arguments.
    - Command line use example:  "cloundlogautologger run"   or "cloundlogautologger run log"  (if want logging to file)
 
