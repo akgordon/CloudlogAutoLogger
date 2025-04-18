@@ -142,7 +142,7 @@ func (cd *Listeners) Js8call(pkt_stg string) {
 	//<call:5>ZZ0ZZ <gridsquare:0> <mode:4>MFSK <submode:3>JS8 <rst_sent:3>556 <rst_rcvd:3>556 <qso_date:8>20250416 <time_on:6>211335 <qso_date_off:8>20250416 <time_off:6>211335 <band:3>20m <freq:9>14.106279 <station_callsign:5>N7AKG <my_gridsquare:6>CN85SL <operator:5>N7AKG <eor>\x00\
 
 	// Parse the ADI to clean it up then re-strigify it
-	adi_fields := agg_adi.Parse_adi(pkt_stg)
+	adi_fields := agg_adi.ParseADIRecord(pkt_stg)
 	adi_stg := agg_adi.Encode_adi(adi_fields)
 	send2Cloudlog(cd, adi_stg)
 
@@ -151,10 +151,10 @@ func (cd *Listeners) Js8call(pkt_stg string) {
 func (cd *Listeners) VARAC(pkt_stg string) {
 	//	Example:
 	// <command:3>Log<parameters:245><CALL:5>zz0zz <MODE:7>DYNAMIC <SUBMODE:7>VARA HF <RST_SENT:3>+01 <RST_RCVD:3>+02 <QSO_DATE:8>20250416 <TIME_ON:6>215130 <QSO_DATE_OFF:8>20250416 <TIME_OFF:6>215131 <BAND:3>20m <STATION_CALLSIGN:5>N7AKG <TX_PWR:0> <COMMENT:14>QSO with VARAC <EOR>\x00\
-	//	adi_fields := agg_adi.Parse_adi(pkt_stg)
+	//	adi_fields := agg_adi.ParseADIRecord(pkt_stg)
 
 	// Parse the ADI to clean it up then re-strigify it
-	adi_fields := agg_adi.Parse_adi(pkt_stg)
+	adi_fields := agg_adi.ParseADIRecord(pkt_stg)
 	adi_stg := agg_adi.Encode_adi(adi_fields)
 	send2Cloudlog(cd, adi_stg)
 }
@@ -164,7 +164,7 @@ func (cd *Listeners) WSJTX(pkt_stg string) {
 	// <call:5>zz0zz <gridsquare:4>EM54 <mode:3>FT8 <rst_sent:0> <rst_rcvd:0> <qso_date:8>20250417 <time_on:6>043403 <qso_date_off:8>20250417 <time_off:6>043459 <band:3>20m <freq:9>14.075307 <station_callsign:5>N7AKG <my_gridsquare:6>CN85SL <tx_pwr:2>50 <comment:3>FT8 <operator:5>N7AKG <eor>\x00\
 
 	// Parse the ADI to clean it up then re-strigify it
-	adi_fields := agg_adi.Parse_adi(pkt_stg)
+	adi_fields := agg_adi.ParseADIRecord(pkt_stg)
 	adi_stg := agg_adi.Encode_adi(adi_fields)
 	send2Cloudlog(cd, adi_stg)
 }
