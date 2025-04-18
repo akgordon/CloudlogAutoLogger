@@ -31,9 +31,13 @@ Usage
    - This will run through a list of options for you to respond
    - The result is an xxxxx.ini file
    - The xxxx.ini file is a simple text file, but the API key is encrypted so do not edit that.
-   
+
 4 Now you can either run the program by selecting the "R" option, or have it run automatically by using command line arguments.
    - Command line use example:  "cloundlogautologger run"   or "cloundlogautologger run log"  (if want logging to file)
+
+5 To stop program
+   - If in interactive mode then press "ENTER" at anytime in the program's window
+   - If using command line mode then ctrl-C or just close the program's window
 
 
 In you 3rd party programs, set your UDP server to local host address "127.0.0.1" and UDP port to any value you want. 
