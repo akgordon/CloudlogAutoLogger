@@ -24,7 +24,7 @@ Suggested compile steps:
 
    (See the build.bat for example compile)
 
-A **Windows** executable can be downloaded from 
+A pre-built **Windows** and **Linux** executable can be downloaded from 
 "http://www.akgordon.com/ham/cloudlogger.zip"
 
 ---------------------------------------
