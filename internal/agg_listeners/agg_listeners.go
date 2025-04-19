@@ -45,7 +45,7 @@ func BuildListener(mode string) (Listeners, bool) {
 			}
 
 			if mode == "VARAC" {
-				if cd.JS8CALL_port != 0 {
+				if cd.VARAC_port != 0 {
 					rtnListener.Port = cd.VARAC_port
 					rtnListener.client_name = "VARAC"
 					return rtnListener, true
@@ -53,7 +53,7 @@ func BuildListener(mode string) (Listeners, bool) {
 			}
 
 			if mode == "WSJTX" {
-				if cd.JS8CALL_port != 0 {
+				if cd.WSJTX_port != 0 {
 					rtnListener.Port = cd.WSJTX_port
 					rtnListener.client_name = "WSJTX"
 					return rtnListener, true
