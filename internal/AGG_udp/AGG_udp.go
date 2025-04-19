@@ -5,7 +5,7 @@ package agg_udp
 //    Example: sudo ufw allow 4992/udp
 
 import (
-	agg_logger "CloudlogAutoLogger/internal/AGG_logger"
+	agg_logger "CloudlogAutoLogger/internal/agg_logger"
 	"errors"
 	"net"
 	"os"

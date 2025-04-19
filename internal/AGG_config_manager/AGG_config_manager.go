@@ -1,7 +1,7 @@
 package agg_config_manager
 
 import (
-	agg_logger "CloudlogAutoLogger/internal/AGG_logger"
+	agg_logger "CloudlogAutoLogger/internal/agg_logger"
 	"bufio"
 	"fmt"
 	"os"
@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-type AGG_config_manager struct {
+type agg_config_manager struct {
 	Cloudlog_url       string
 	Cloudlog_api_key   string
 	Station_profile_id string
@@ -23,7 +23,7 @@ const (
 	crypt_key string = "2e899fe6ffb07f2e1a63f2f619a7f4daddee80eb92a9ed5e328a0c1e2a1c0c58"
 )
 
-func (cd *AGG_config_manager) init() {
+func (cd *agg_config_manager) init() {
 	cd.Cloudlog_url = ""
 	cd.Cloudlog_api_key = ""
 	cd.Station_profile_id = ""
@@ -32,13 +32,13 @@ func (cd *AGG_config_manager) init() {
 	cd.JS8CALL_port = 0
 }
 
-func GetConfig() (AGG_config_manager, bool) {
+func GetConfig() (agg_config_manager, bool) {
 
 	//newKey := Genkey()
 	//fmt.Println(newKey)
 
 	// Setup return structure
-	var cd AGG_config_manager
+	var cd agg_config_manager
 	cd.init()
 
 	// Open file
@@ -94,7 +94,7 @@ func GetConfig() (AGG_config_manager, bool) {
 	return cd, true
 }
 
-func SaveConfig(cd AGG_config_manager) bool {
+func SaveConfig(cd agg_config_manager) bool {
 
 	// Open file
 	var filePtr *os.File
