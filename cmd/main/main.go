@@ -1,9 +1,9 @@
 package main
 
 import (
-	agg_config_manager "CloudlogAutoLogger/internal/AGG_config_manager"
-	agg_logger "CloudlogAutoLogger/internal/AGG_logger"
+	agg_config_manager "CloudlogAutoLogger/internal/agg_config_manager"
 	"CloudlogAutoLogger/internal/agg_listeners"
+	agg_logger "CloudlogAutoLogger/internal/agg_logger"
 	"bufio"
 	"fmt"
 	"os"
@@ -18,7 +18,7 @@ func main() {
 	if len(args) < 2 {
 		fmt.Print("Welcome to CloudLog Auto Logger\n")
 		fmt.Print("   by the Alan Gordon Group\n")
-		fmt.Print("           v0.1\n")
+		fmt.Print("           v1.1\n")
 		fmt.Print("\n")
 		fmt.Print(" Enter one of the following commands:\n")
 		fmt.Print("    S  for Set or update configuration\n")

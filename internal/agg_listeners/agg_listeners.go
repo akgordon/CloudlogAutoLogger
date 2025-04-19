@@ -1,11 +1,11 @@
 package agg_listeners
 
 import (
-	agg_config_manager "CloudlogAutoLogger/internal/AGG_config_manager"
-	agg_logger "CloudlogAutoLogger/internal/AGG_logger"
-	agg_udp "CloudlogAutoLogger/internal/AGG_udp"
 	"CloudlogAutoLogger/internal/agg_adi"
+	agg_config_manager "CloudlogAutoLogger/internal/agg_config_manager"
+	agg_logger "CloudlogAutoLogger/internal/agg_logger"
 	"CloudlogAutoLogger/internal/agg_tcp"
+	agg_udp "CloudlogAutoLogger/internal/agg_udp"
 	"strconv"
 	"time"
 )
@@ -45,7 +45,7 @@ func BuildListener(mode string) (Listeners, bool) {
 			}
 
 			if mode == "VARAC" {
-				if cd.JS8CALL_port != 0 {
+				if cd.VARAC_port != 0 {
 					rtnListener.Port = cd.VARAC_port
 					rtnListener.client_name = "VARAC"
 					return rtnListener, true
@@ -53,7 +53,7 @@ func BuildListener(mode string) (Listeners, bool) {
 			}
 
 			if mode == "WSJTX" {
-				if cd.JS8CALL_port != 0 {
+				if cd.WSJTX_port != 0 {
 					rtnListener.Port = cd.WSJTX_port
 					rtnListener.client_name = "WSJTX"
 					return rtnListener, true
@@ -71,10 +71,9 @@ func (cd *Listeners) Start() {
 	for !cd.endFlag {
 		stat, udp_pkt := agg_udp.WaitOnUDP(cd.Port, 250, false)
 		if stat {
-			agg_logger.Get().Log("***** Begin packet ***** Port:", portstg)
+			//agg_logger.Get().Log("***** Begin packet ***** Port:", portstg)
 
 			pkt_stg := string(udp_pkt)
-			agg_logger.Get().Log(pkt_stg, "")
 
 			if cd.client_name == "JS8CALL" {
 				cd.Js8call(pkt_stg)
@@ -88,7 +87,7 @@ func (cd *Listeners) Start() {
 				cd.WSJTX(pkt_stg)
 			}
 
-			agg_logger.Get().Log("***** End packet ***** Port:", portstg)
+			//agg_logger.Get().Log("***** End packet ***** Port:", portstg)
 		}
 		//time.Sleep(time.Millisecond)
 	}
@@ -163,6 +162,14 @@ func (cd *Listeners) WSJTX(pkt_stg string) {
 	//	Example:
 	// <call:5>zz0zz <gridsquare:4>EM54 <mode:3>FT8 <rst_sent:0> <rst_rcvd:0> <qso_date:8>20250417 <time_on:6>043403 <qso_date_off:8>20250417 <time_off:6>043459 <band:3>20m <freq:9>14.075307 <station_callsign:5>N7AKG <my_gridsquare:6>CN85SL <tx_pwr:2>50 <comment:3>FT8 <operator:5>N7AKG <eor>\x00\
 
+	// Check for the XSJTX Heart beat
+	bytes := []byte(pkt_stg)
+	if len(bytes) > 4 {
+		if (bytes[0] == 0xad) && (bytes[1] == 0xbc) && (bytes[2] == 0xcb) && (bytes[3] == 0xda) {
+			return
+		}
+	}
+
 	// Parse the ADI to clean it up then re-strigify it
 	adi_fields := agg_adi.ParseADIRecord(pkt_stg)
 	adi_stg := agg_adi.Encode_adi(adi_fields)
@@ -170,6 +177,8 @@ func (cd *Listeners) WSJTX(pkt_stg string) {
 }
 
 func send2Cloudlog(cp *Listeners, pkt_stg string) bool {
+
+	agg_logger.Get().Log("Sending to CloundLog:", pkt_stg)
 
 	_payload := make(map[string]string)
 	_payload["key"] = cp.Cloudlog_api_key

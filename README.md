@@ -63,12 +63,13 @@ If you do use just one then only set the port for WSJT-X and set the others to 0
 ---------------------------------------
 WSJT-X
 ---------------------------------------
-Set address amd port in menu "settings" --> "Reporting"  
+Menu "File" --> "Settings" --> "Reporting"
+Enable the Secondary UDP server and set address and port number.
 
 ---------------------------------------
 JS8Call
 ---------------------------------------
-Set address amd port in Menu "File" --> "Settings" --> "Reporting"
+Set address and port in Menu "File" --> "Settings" --> "Reporting"
 Enable the N1MM logger option at bottom page and enter address and port number.
 
 ---------------------------------------
